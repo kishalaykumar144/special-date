@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Our Special Date ❤️</title>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    min-height:100vh;
+    overflow:hidden;
+    background:linear-gradient(
+        135deg,
+        #ffd6e0,
+        #ffe5ec,
+        #fff1f2
+    );
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    position:relative;
+}
+
+.page{
+    width:90%;
+    max-width:700px;
+    text-align:center;
+
+    background:rgba(255,255,255,0.7);
+    backdrop-filter:blur(12px);
+
+    border-radius:25px;
+    padding:40px;
+
+    box-shadow:0 10px 35px rgba(0,0,0,.15);
+
+    display:none;
+
+    animation:fade .6s ease;
+}
+
+.active{
+    display:block;
+}
+
+@keyframes fade{
+    from{
+        opacity:0;
+        transform:translateY(20px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+h1,h2{
+    color:#ff4d88;
+}
+
+button{
+    border:none;
+    padding:12px 25px;
+    margin:10px;
+    border-radius:30px;
+    cursor:pointer;
+    font-size:18px;
+    transition:.3s;
+}
+
+button:hover{
+    transform:scale(1.05);
+}
+
+#yesBtn{
+    background:#ff4d88;
+    color:white;
+    animation:pulse 1.2s infinite;
+}
+
+@keyframes pulse{
+    0%{transform:scale(1);}
+    50%{transform:scale(1.08);}
+    100%{transform:scale(1);}
+}
+
+#noBtn{
+    background:#777;
+    color:white;
+    position:absolute;
+}
+
+.time-btn{
+    background:#ff4d88;
+    color:white;
+    width:220px;
+}
+
+input[type=date]{
+    padding:10px;
+    font-size:18px;
+    border-radius:10px;
+    border:1px solid #ccc;
+}
+
+#preview,
+#finalPhoto{
+    max-width:260px;
+    border-radius:20px;
+    margin-top:15px;
+    box-shadow:0 0 25px rgba(255,77,136,.4);
+}
+
+#hearts-container{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    overflow:hidden;
+    z-index:-1;
+}
+
+.heart{
+    position:absolute;
+    color:#ff4d88;
+    animation:floatHeart linear forwards;
+}
+
+@keyframes floatHeart{
+    from{
+        transform:translateY(100vh);
+        opacity:0;
+    }
+    20%{
+        opacity:1;
+    }
+    to{
+        transform:translateY(-120px);
+        opacity:0;
+    }
+}
+
+.cursor-heart{
+    position:fixed;
+    pointer-events:none;
+    color:#ff4d88;
+    animation:cursorFade 1s forwards;
+}
+
+@keyframes cursorFade{
+    to{
+        opacity:0;
+        transform:translateY(-20px);
+    }
+}
+
+#musicBtn{
+    position:fixed;
+    top:15px;
+    right:15px;
+    background:#ff4d88;
+    color:white;
+}
+
+#countdown{
+    margin-top:20px;
+    font-size:22px;
+    color:#ff4d88;
+    font-weight:bold;
+}
+
+.sticker{
+    font-size:50px;
+    margin:20px 0;
+}
+
+.sparkle{
+    position:absolute;
+    color:#fff;
+    font-size:20px;
+    animation:sparkleAnim 2s linear forwards;
+}
+
+@keyframes sparkleAnim{
+    from{
+        opacity:1;
+        transform:scale(.5);
+    }
+    to{
+        opacity:0;
+        transform:scale(2);
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div id="hearts-container"></div>
+
+<button id="musicBtn">🎵 Music</button>
+
+<audio id="bgMusic" loop>
+    <source src="https://assets.mixkit.co/active_storage/sfx/2708/2708-preview.mp3" type="audio/mpeg">
+</audio>
+
+<!-- PAGE 1 -->
+<div class="page active" id="page1">
+    <h1>Would You Go On A Date With Me? ❤️</h1>
+    <br>
+    <button id="yesBtn">Yes 💖</button>
+</div>
+
+<button id="noBtn">No 😢</button>
+
+<!-- PAGE 2 -->
+<div class="page" id="page2">
+    <h2>Select Our Date 📅</h2>
+    <br>
+    <input type="date" id="datePicker">
+    <br><br>
+    <button onclick="goToTime()">Next ❤️</button>
+</div>
+
+<!-- PAGE 3 -->
+<div class="page" id="page3">
+    <h2>Choose Time ⏰</h2>
+
+    <button class="time-btn" onclick="selectTime('4:00 PM - 5:00 PM')">4:00 PM - 5:00 PM</button><br>
+
+    <button class="time-btn" onclick="selectTime('5:00 PM - 6:00 PM')">5:00 PM - 6:00 PM</button><br>
+
+    <button class="time-btn" onclick="selectTime('6:00 PM - 7:00 PM')">6:00 PM - 7:00 PM</button><br>
+
+    <button class="time-btn" onclick="selectTime('7:00 PM - 8:00 PM')">7:00 PM - 8:00 PM</button>
+</div>
+
+<!-- PAGE 4 -->
+<div class="page" id="page4">
+    <h2>One More Thing 🥰</h2>
+    <p>Can I get a cute picture of you? ❤️</p>
+
+    <br>
+
+    <input
+        type="file"
+        id="photoInput"
+        accept="image/*"
+        capture="environment">
+
+    <br>
+
+    <img id="preview" style="display:none">
+
+    <br><br>
+
+    <button onclick="finishDate()">Continue ❤️</button>
+</div>
+
+<!-- PAGE 5 -->
+<div class="page" id="page5">
+
+    <h1>Thank You For Saying Yes ❤️</h1>
+
+    <div class="sticker">
+        💕🌹🥰🌹💕
+    </div>
+
+    <img id="finalPhoto">
+
+    <h2 id="chosenInfo"></h2>
+
+    <div id="countdown"></div>
+
+    <br>
+
+    <p style="font-size:20px;line-height:1.8">
+        Thank you for making my day by saying yes. ❤️
+        <br><br>
+        I can't wait to spend this special time together.
+        <br><br>
+        Get ready wearing your cutest romantic dress,
+        bring your beautiful smile,
+        and let's create lovely memories together. 🌹✨
+    </p>
+
+</div>
+
+<script>
+
+let selectedDate="";
+let selectedTime="";
+let uploadedPhoto="";
+
+const pages=document.querySelectorAll(".page");
+
+function showPage(id){
+    pages.forEach(p=>p.classList.remove("active"));
+    document.getElementById(id).classList.add("active");
+}
+
+/* MUSIC */
+
+const music=document.getElementById("bgMusic");
+
+document.getElementById("musicBtn").onclick=()=>{
+    if(music.paused){
+        music.play();
+        musicBtn.innerText="🔇 Mute";
+    }else{
+        music.pause();
+        musicBtn.innerText="🎵 Music";
+    }
+};
+
+/* FLOATING HEARTS */
+
+function createHeart(){
+
+    const heart=document.createElement("div");
+
+    heart.className="heart";
+    heart.innerHTML="❤️";
+
+    heart.style.left=Math.random()*100+"vw";
+    heart.style.fontSize=(15+Math.random()*30)+"px";
+    heart.style.animationDuration=(4+Math.random()*4)+"s";
+
+    document
+        .getElementById("hearts-container")
+        .appendChild(heart);
+
+    setTimeout(()=>heart.remove(),8000);
+}
+
+setInterval(createHeart,400);
+
+/* HEART CURSOR */
+
+document.addEventListener("mousemove",(e)=>{
+
+    const h=document.createElement("div");
+
+    h.className="cursor-heart";
+    h.innerHTML="💕";
+
+    h.style.left=e.clientX+"px";
+    h.style.top=e.clientY+"px";
+
+    document.body.appendChild(h);
+
+    setTimeout(()=>h.remove(),1000);
+});
+
+/* SPARKLES */
+
+function sparkle(){
+
+    const s=document.createElement("div");
+
+    s.className="sparkle";
+    s.innerHTML="✨";
+
+    s.style.left=Math.random()*window.innerWidth+"px";
+    s.style.top=Math.random()*window.innerHeight+"px";
+
+    document.body.appendChild(s);
+
+    setTimeout(()=>s.remove(),2000);
+}
+
+setInterval(sparkle,700);
+
+/* NO BUTTON ESCAPE */
+
+const noBtn=document.getElementById("noBtn");
+
+noBtn.style.left="60%";
+noBtn.style.top="60%";
+
+function moveNo(){
+
+    const x=Math.random()*
+        (window.innerWidth-150);
+
+    const y=Math.random()*
+        (window.innerHeight-100);
+
+    noBtn.style.left=x+"px";
+    noBtn.style.top=y+"px";
+}
+
+noBtn.addEventListener("mouseover",moveNo);
+noBtn.addEventListener("touchstart",moveNo);
+
+/* YES */
+
+document
+.getElementById("yesBtn")
+.addEventListener("click",()=>{
+
+    confetti({
+        particleCount:250,
+        spread:120,
+        origin:{y:.6},
+        colors:[
+            '#ff4d88',
+            '#ffc2d1',
+            '#ffffff'
+        ]
+    });
+
+    noBtn.style.display="none";
+
+    setTimeout(()=>{
+        showPage("page2");
+    },1000);
+});
+
+/* DATE */
+
+function goToTime(){
+
+    selectedDate=
+    document.getElementById("datePicker").value;
+
+    if(!selectedDate){
+        alert("Please choose a date ❤️");
+        return;
+    }
+
+    showPage("page3");
+}
+
+/* TIME */
+
+function selectTime(time){
+
+    selectedTime=time;
+
+    showPage("page4");
+}
+
+/* PHOTO */
+
+document
+.getElementById("photoInput")
+.addEventListener("change",(e)=>{
+
+    const file=e.target.files[0];
+
+    if(file){
+
+        uploadedPhoto=
+        URL.createObjectURL(file);
+
+        const preview=
+        document.getElementById("preview");
+
+        preview.src=uploadedPhoto;
+        preview.style.display="block";
+    }
+});
+
+/* FINAL PAGE */
+
+function finishDate(){
+
+    if(!uploadedPhoto){
+
+        alert("Please upload a photo ❤️");
+        return;
+    }
+
+    showPage("page5");
+
+    document
+    .getElementById("finalPhoto")
+    .src=uploadedPhoto;
+
+    document
+    .getElementById("chosenInfo")
+    .innerHTML=
+    `📅 ${selectedDate}<br>⏰ ${selectedTime}`;
+
+    startCountdown(selectedDate);
+}
+
+/* COUNTDOWN */
+
+function startCountdown(date){
+
+    function update(){
+
+        const target=
+        new Date(date);
+
+        const now=
+        new Date();
+
+        const diff=
+        target-now;
+
+        if(diff<=0){
+
+            document
+            .getElementById("countdown")
+            .innerHTML=
+            "Today's the day ❤️";
+
+            return;
+        }
+
+        const days=
+        Math.floor(
+            diff/(1000*60*60*24)
+        );
+
+        document
+        .getElementById("countdown")
+        .innerHTML=
+        `${days} day(s) until our date ❤️`;
+    }
+
+    update();
+
+    setInterval(update,1000);
+}
+
+</script>
+
+</body>
+</html>
