@@ -471,7 +471,7 @@ input[type=tel]{
     <h1>Thank You For Saying Yes ❤️</h1>
 
     <div class="sticker">
-        💕🌹🥰🌹💕
+        💕 🌹 🥰 🌹 💕
     </div>
 
     <img id="finalPhoto">
@@ -506,8 +506,8 @@ let selectedDate="";
 let selectedTime="";
 let uploadedPhoto="";
 
-// Fixed WhatsApp number
-const WHATSAPP_NUMBER = "6207841402";
+// Fixed WhatsApp number with country code
+const WHATSAPP_NUMBER = "+916207841402";
 
 const pages=document.querySelectorAll(".page");
 
@@ -642,7 +642,7 @@ function goToTime(){
     document.getElementById("datePicker").value;
 
     if(!selectedDate){
-        alert("Please choose a date ❤���");
+        alert("Please choose a date ❤️");
         return;
     }
 
@@ -769,7 +769,7 @@ function sendToWhatsApp(){
     const message = `Hello! 💕 I'm looking forward to our date! 📅 Date: ${selectedDate} ⏰ Time: ${selectedTime} 🌹✨`;
 
     // WhatsApp API URL with pre-filled number
-    const whatsappURL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+    const whatsappURL = `https://wa.me/${WHATSAPP_NUMBER.replace('+', '')}?text=${encodeURIComponent(message)}`;
 
     // Open WhatsApp
     window.open(whatsappURL, '_blank');
