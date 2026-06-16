@@ -199,6 +199,19 @@ input[type=date]{
         transform:scale(2);
     }
 }
+
+.button-group{
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+#okBtn{
+    background:#ff4d88;
+    color:white;
+    display:none;
+}
 </style>
 </head>
 
@@ -209,7 +222,7 @@ input[type=date]{
 <button id="musicBtn">🎵 Music</button>
 
 <audio id="bgMusic" loop>
-    <source src="https://assets.mixkit.co/active_storage/sfx/2708/2708-preview.mp3" type="audio/mpeg">
+    <source src="https://assets.mixkit.co/active_storage/sfx/2754/2754-preview.mp3" type="audio/mpeg">
 </audio>
 
 <!-- PAGE 1 -->
@@ -262,7 +275,9 @@ input[type=date]{
 
     <br><br>
 
-    <button onclick="finishDate()">Continue ❤️</button>
+    <div class="button-group">
+        <button id="okBtn">OK ✓</button>
+    </div>
 </div>
 
 <!-- PAGE 5 -->
@@ -271,7 +286,7 @@ input[type=date]{
     <h1>Thank You For Saying Yes ❤️</h1>
 
     <div class="sticker">
-        💕🌹🥰🌹💕
+        💕🌹🥰���💕
     </div>
 
     <img id="finalPhoto">
@@ -467,18 +482,30 @@ document
 
         preview.src=uploadedPhoto;
         preview.style.display="block";
+
+        // Show OK button when photo is uploaded
+        document.getElementById("okBtn").style.display="inline-block";
     }
 });
 
-/* FINAL PAGE */
+/* OK BUTTON */
 
-function finishDate(){
+document
+.getElementById("okBtn")
+.addEventListener("click",()=>{
 
     if(!uploadedPhoto){
 
         alert("Please upload a photo ❤️");
         return;
     }
+
+    finishDate();
+});
+
+/* FINAL PAGE */
+
+function finishDate(){
 
     showPage("page5");
 
