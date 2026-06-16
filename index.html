@@ -276,7 +276,7 @@ input[type=date]{
     <br><br>
 
     <div class="button-group">
-        <button id="okBtn">OK ✓</button>
+        <button id="okBtn" onclick="handleOkClick()">OK ✓</button>
     </div>
 </div>
 
@@ -286,7 +286,7 @@ input[type=date]{
     <h1>Thank You For Saying Yes ❤️</h1>
 
     <div class="sticker">
-        💕🌹🥰���💕
+        ���🌹🥰🌹💕
     </div>
 
     <img id="finalPhoto">
@@ -488,20 +488,17 @@ document
     }
 });
 
-/* OK BUTTON */
+/* OK BUTTON HANDLER */
 
-document
-.getElementById("okBtn")
-.addEventListener("click",()=>{
+function handleOkClick(){
 
     if(!uploadedPhoto){
-
         alert("Please upload a photo ❤️");
         return;
     }
 
     finishDate();
-});
+}
 
 /* FINAL PAGE */
 
